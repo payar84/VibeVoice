@@ -40,4 +40,6 @@ Our core principles are **code minimalism**, **high readability**, and **functio
 
 ---
 
+> **Personal fork note:** This is my personal learning fork. I'm not accepting outside PRs here — the guidelines above reflect upstream's standards and are kept for reference only.
+
 We look forward to receiving **precise, streamlined, and substantively valuable** research contributions.
