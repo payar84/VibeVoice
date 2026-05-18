@@ -35,14 +35,14 @@ class Transcriber:
 
     def __init__(
         self,
-        model_size: str = "base",
+        model_size: str = "small",  # bumped from 'base' — noticeably better accuracy for minimal speed cost
         device: Optional[str] = None,
         language: Optional[str] = None,
     ):
         """Initialize the Transcriber.
 
         Args:
-            model_size: Whisper model size. Defaults to 'base'.
+            model_size: Whisper model size. Defaults to 'small'.
             device: Compute device ('cpu' or 'cuda'). Auto-detects if None.
             language: Language code (e.g. 'en', 'zh'). Auto-detect if None.
         """
@@ -94,51 +94,4 @@ class Transcriber:
 
         Raises:
             FileNotFoundError: If the audio file does not exist.
-            ValueError: If the file format is unsupported.
-        """
-        audio_path = Path(audio_path)
-
-        if not audio_path.exists():
-            raise FileNotFoundError(f"Audio file not found: {audio_path}")
-
-        if audio_path.suffix.lower() not in SUPPORTED_FORMATS:
-            raise ValueError(
-                f"Unsupported format '{audio_path.suffix}'. "
-                f"Supported: {SUPPORTED_FORMATS}"
-            )
-
-        # Lazy-load model on first transcription
-        if self.model is None:
-            self.load_model()
-
-        logger.info("Transcribing: %s", audio_path.name)
-
-        options = {
-            "task": task,
-            "verbose": verbose,
-        }
-        if self.language:
-            options["language"] = self.language
-
-        result = self.model.transcribe(str(audio_path), **options)
-
-        logger.info(
-            "Transcription complete | language=%s | segments=%d",
-            result.get("language", "unknown"),
-            len(result.get("segments", [])),
-        )
-
-        return result
-
-    def transcribe_to_text(self, audio_path: Union[str, Path], **kwargs) -> str:
-        """Convenience method that returns only the transcribed text string.
-
-        Args:
-            audio_path: Path to the audio/video file.
-            **kwargs: Additional arguments forwarded to :meth:`transcribe`.
-
-        Returns:
-            The full transcribed text as a plain string.
-        """
-        result = self.transcribe(audio_path, **kwargs)
-        return result["text"].strip()
+            ValueError: If the file format is 
